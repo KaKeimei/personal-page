@@ -35,7 +35,6 @@ public class ArticleManager {
 		params.put("startTime", startTime);
 		params.put("limit", limit);
 		return articleMapper.selectByOffsetAndCount(params);
-
 	}
 
 	public int createArticle(String title, ArticleCateType type, String data) {
