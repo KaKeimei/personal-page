@@ -22,7 +22,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * manager to hold an spv wallet and provide services
@@ -186,7 +185,7 @@ public class BitcoinWalletManager {
 
 		try {
 			//mannually construct sendResult to modify feePerKb
-			SendRequest request = org.bitcoinj.wallet.SendRequest.to(to, value);
+			SendRequest request = SendRequest.to(to, value);
 			//fixed feePerKb as 1 sat/b
 			request.feePerKb = Coin.valueOf(1000);
 			Wallet.SendResult result = walletAppKit.wallet().sendCoins(request);
@@ -202,10 +201,10 @@ public class BitcoinWalletManager {
 				logger.error("exception occured while broadcasting");
 			}
 
-
-			// you can use a block explorer like https://www.biteasy.com/ to inspect the transaction with the printed transaction hash.
 		} catch (InsufficientMoneyException e) {
-			logger.error("Not enough coins in your wallet. Missing " + (e.missing != null ? e.missing.getValue() : 0) + " satoshis are missing (including fees)");
+			logger.error("Not enough coins in your wallet. Missing " +
+					(e.missing != null ? e.missing.getValue() : 0) + " satoshis are missing (including fees)");
+
 
 		}
 		return null;
