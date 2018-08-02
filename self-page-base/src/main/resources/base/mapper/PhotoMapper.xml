@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hh.projectxx.base.db.mapper.PhotoMapper" >
+  <resultMap id="BaseResultMap" type="com.hh.projectxx.base.db.entity.Photo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="resource" property="resource" jdbcType="VARCHAR" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="series_id" property="seriesId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, resource, file_name, status, create_time, series_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from photo
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectPhotoByRange" resultMap="BaseResultMap">
+  	select * from photo where 1=1 
+  	<if test="startId != null">
+  		and id &gt;= #{startId}
+  	</if>
+  	<if test="endId != null">
+  		and id &lt;= #{endId}
+  	</if>
+  	limit 0,1000
+  </select>
+  
+  <select id="selectBySeriesId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from photo
+    where series_id = #{seriesId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="countBySeriesId" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select 
+    count(*)
+    from photo
+    where series_id = #{seriesId,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from photo
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.hh.projectxx.base.db.entity.Photo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into photo (resource, file_name, status, create_time, series_id)
+    values (#{resource}, #{fileName}, #{status}, #{createTime}, #{seriesId})
+  </insert>
+  
+	<insert id="insertList" useGeneratedKeys="true" parameterType="java.util.List">  
+	    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">  
+	        SELECT  
+	        LAST_INSERT_ID()  
+	    </selectKey>  
+	   		insert into photo (resource, file_name, status, create_time, series_id)
+	  		values  
+	    <foreach collection="list" item="photo" index="index" separator="," >  
+	        (#{photo.resource}, #{photo.fileName}, #{photo.status}, #{photo.createTime}, #{photo.seriesId})
+	    </foreach>  
+	</insert> 
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.hh.projectxx.base.db.entity.Photo" >
+		update photo
+	<set >
+	  <if test="resource != null" >
+        resource = #{resource,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="seriesId != null" >
+        series_id = #{seriesId,jdbcType=TIMESTAMP},
+      </if>
+	</set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  
+</mapper>

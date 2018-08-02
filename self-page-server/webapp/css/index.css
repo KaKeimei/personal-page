@@ -1,0 +1,215 @@
+@CHARSET "utf-8";
+
+html,body,div, img, a,p{
+	margin : 0;
+	padding:0;
+	overflow:hidden;
+}
+
+.clear{
+	clear: both;
+}
+
+.left {
+	
+	float: left;
+}
+
+.font50 {
+	font-size: 50px;
+}
+
+.font25 {
+	font-size: 25px;
+}
+
+body, p, textarea,a{
+        font-family: 'Microsoft YaHei', 微软雅黑,Arial,STHeiti,sans-serif;
+}
+
+body{
+	min-width: 1200px;
+}
+
+.header_border {
+	height: 2px;
+	background-color: #eee;
+	
+}
+
+
+#big_logo img{
+	width:134px;
+	height: 134px;
+}
+
+#download_android_btn, #download_ios_btn{
+	background-image: url("../img/btv/buttons.png");
+}
+
+.white{
+	color: #fff;
+}
+
+.center{
+	text-align: center;
+}
+
+#content{
+	
+}
+
+.content
+{
+	width: 1200px;
+	margin: 0 auto;
+}
+
+#header{
+	background-color: #ffffff;
+	height: 84px;
+}
+
+#header #logo{
+	width: 65px;
+	margin-left: 100px;
+	padding-top: 20px;
+	display: inline-block;
+	float: left;
+}
+
+#header #title{
+	width: 300px;
+	margin-top:25px;
+	float:left;
+}
+
+#header #nav {
+	float: right;
+	margin: 22px 100px 0 0;
+	display: inline-block;
+	height: 60px;
+	line-height: 60px;
+}
+#header #nav a {
+	float: right;
+	display: inline-block;
+	width:80px;
+	text-decoration: none;
+	text-align:center;
+	color: #666;
+	font-size: 18px;
+}
+#header #nav a.current {
+	border-bottom: 2px solid #0000ff;
+}
+#header #nav a#about_us {
+	margin-left: 36px;
+}
+
+#main_content
+{
+	background-color: #ffffff;
+	height: 496px;
+}
+
+#main_content #main_content_left
+{
+	float: left;
+	margin: 38px 100px 0 100px;
+	width: 393px;
+	height: 535px; 
+}
+
+#main_content #main_content_right
+{
+	float : left;
+	margin: 69px 0 0 6px;
+	width : 600px;
+}
+
+#main_content #main_content_right #download
+{
+	margin: 66px 0 0 0;	
+}
+
+#main_content #main_content_right #download #download_btns{
+	float : left;
+	width : 231px;
+	height : 150px;
+}
+
+#main_content #main_content_right #download #download_btns a{
+	display: inline-block;
+	width : 231px;
+	height : 68px;
+}
+
+#main_content #main_content_right #download #download_btns #download_ios_btn{
+	
+	background-position: 0 0 ;
+}
+
+#main_content #main_content_right #download #download_btns #download_ios_btn:HOVER{
+	background-position: 0 -136px ;
+}
+
+#main_content #main_content_right #download #download_btns #download_android_btn
+{
+	margin-top: 20px;
+	background-position: 0 -68px ;
+}
+
+#main_content #main_content_right #download #download_btns #download_android_btn:HOVER
+{
+
+		
+	background-position: 0  -204px;
+}
+
+#main_content #main_content_right #download #qrcode{
+	float : left;
+	font-size: 18px;
+	margin-left:50px;
+}
+
+#main_content #main_content_right #download #qrcode #qrcode_text{
+	margin-top: 14px;
+}
+
+#about1 {
+	height: 454px;
+	background-color: #fff;
+}
+
+#about2 {
+	height: 373px;
+	background-color: #f9f9f9;
+}
+
+div.about p.title {
+	font-size: 30px;
+	color: #666666;
+	margin-left: 100px;
+	padding: 80px 0 30px;
+}
+div.about p.text {
+	font-size: 20px;
+	color: #666666;
+	margin-left: 100px;
+	margin-bottom: 20px;
+	line-height: 1.5em;
+}
+
+#footer{
+	height: 150px;
+	padding-top: 50px;
+	font-size: 14px;
+	background-color: #f9f9f9;
+}
+
+#footer p{
+	line-height: 22px;
+	text-align: center;
+	color: #333;
+}

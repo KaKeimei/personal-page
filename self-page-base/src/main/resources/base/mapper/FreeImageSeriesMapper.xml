@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.projectxx.base.db.mapper.FreeImageSeriesMapper">
+  <resultMap id="BaseResultMap" type="com.hh.projectxx.base.db.entity.FreeImageSeries">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="website_time" jdbcType="TIMESTAMP" property="websiteTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="identify_id" jdbcType="VARCHAR" property="identifyId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, website_time, create_time, url, source, status, identify_id, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from free_image_series
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByRowbouds" resultMap="BaseResultMap">
+  	select * from free_image_series where status = 2
+  	order by website_time desc
+  </select>
+  
+   <select id="countAll" resultType="java.lang.Integer">
+  	select count(*) from free_image_series where status = 2
+   </select>
+  
+  <select id="selectAllUnimplemented" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" /> 
+    from free_image_series
+    where status=0
+    limit 50
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from free_image_series
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hh.projectxx.base.db.entity.FreeImageSeries">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into free_image_series (title, website_time, create_time, 
+      url, source, status, 
+      identify_id, modify_time)
+    values (#{title,jdbcType=VARCHAR}, #{websiteTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{url,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{identifyId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hh.projectxx.base.db.entity.FreeImageSeries">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into free_image_series
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        title,
+      </if>
+      <if test="websiteTime != null">
+        website_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="identifyId != null">
+        identify_id,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="websiteTime != null">
+        #{websiteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="identifyId != null">
+        #{identifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hh.projectxx.base.db.entity.FreeImageSeries">
+    update free_image_series
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="websiteTime != null">
+        website_time = #{websiteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="identifyId != null">
+        identify_id = #{identifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hh.projectxx.base.db.entity.FreeImageSeries">
+    update free_image_series
+    set title = #{title,jdbcType=VARCHAR},
+      website_time = #{websiteTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      url = #{url,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      identify_id = #{identifyId,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="clearExpiredStatus">
+	  update free_image_series
+	  set status = 99,  modify_time = now()
+	  where status = 1 and  (select DATE_ADD(modify_time, INTERVAL 1 HOUR)) &lt; now()
+  </update>
+</mapper>

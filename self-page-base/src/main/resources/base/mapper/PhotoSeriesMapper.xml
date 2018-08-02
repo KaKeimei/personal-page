@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hh.projectxx.base.db.mapper.PhotoSeriesMapper" >
+  <resultMap id="BaseResultMap" type="com.hh.projectxx.base.db.entity.PhotoSeries" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="website_time" property="websiteTime" jdbcType="TIMESTAMP" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="identify_id" property="identifyId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, create_time, modify_time, website_time, url, type, status, identify_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from photo_series
+    where id = #{id,jdbcType=INTEGER}
+    
+  </select>
+  <select id="selectByRowbouds" resultMap="BaseResultMap">
+  	select * from photo_series where type = #{type,jdbcType=INTEGER} and status = 2
+  	order by website_time desc
+  </select>
+  
+   <select id="selectInvalidByRowbouds" resultMap="BaseResultMap">
+  	select * from photo_series where 
+  	(status = 0 and (select count(*) from photo where photo.series_id = photo_series.id) = 0) or status=3
+  	order by website_time desc
+  </select>
+  
+  <select id="selectAllUnimplemented" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" /> 
+    from photo_series
+    where status=0 and (select count(*) from photo where photo.series_id = photo_series.id = 0)
+    limit 200
+  </select>
+  
+  <select id="countAll" resultType="java.lang.Integer">
+  	select count(*) from photo_series where type=#{type,jdbcType=INTEGER} and status = 2
+  </select>
+  
+  <select id="selectMaxId" resultType="java.lang.Integer">
+  	select max(id) from photo_series 
+  </select>
+  
+  <insert id="insert" parameterType="com.hh.projectxx.base.db.entity.PhotoSeries" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into photo_series (title, create_time, website_time, url, type, status, identify_id)
+    values (#{title},
+      #{createTime,jdbcType=TIMESTAMP}, #{websiteTime}, #{url}, #{type}, #{status}, #{identifyId})
+  </insert>
+  
+  	<insert id="insertList" useGeneratedKeys="true" parameterType="java.util.List">  
+	    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">  
+	        SELECT  
+	        LAST_INSERT_ID()  
+	    </selectKey>  
+	     insert into photo_series (title, create_time, website_time, url, type, status, identify_id)
+	    values  
+	    <foreach collection="list" item="photoSeries" index="index" separator="," >  
+	        (#{photoSeries.title}, #{photoSeries.createTime,jdbcType=TIMESTAMP}, #{photoSeries.websiteTime}, #{photoSeries.url}, #{photoSeries.type}, #{photoSeries.status}, #{photoSeries.identifyId}) 
+	    </foreach>  
+	</insert> 
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.hh.projectxx.base.db.entity.PhotoSeries" >
+    update photo_series
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="websiteTime != null" >
+        website_time = #{websiteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="identifyId != null" >
+        identify_id = #{identifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="clearExpiredStatus">
+	  update photo_series
+	  set status = 99,  modify_time = now()
+	  where status = 1 and  (select DATE_ADD(modify_time, INTERVAL 1 HOUR)) &lt; now()
+  </update>
+</mapper>

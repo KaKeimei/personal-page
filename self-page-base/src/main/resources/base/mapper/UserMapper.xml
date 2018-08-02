@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hh.projectxx.base.db.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.hh.projectxx.base.db.entity.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="passport" property="passport" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="experience" property="experience" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="balance" property="balance" jdbcType="INTEGER" />
+    <result column="coin_count" property="coinCount" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, passport, password, status, create_time, name, phone, experience, level, balance, coin_count
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPassport" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where passport = #{passport,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="countAll" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select  count(*)  from user
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.hh.projectxx.base.db.entity.User" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (passport, password, status, create_time, name, phone, experience, level, balance, coin_count)
+    values (#{passport}, #{password}, #{status}, #{createTime}, #{name}, #{phone}, #{experience}, #{level}, #{balance}, #{coinCount})
+  </insert> 
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.hh.projectxx.base.db.entity.User" >
+		update user
+	<set >
+	  <if test="passport != null" >
+        passport = #{passport,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="experience != null" >
+        experience = #{experience,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="coinCount != null" >
+        coin_count = #{coinCount,jdbcType=INTEGER},
+      </if>
+	</set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  
+</mapper>

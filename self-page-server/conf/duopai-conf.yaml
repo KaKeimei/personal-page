@@ -1,0 +1,15 @@
+# for jetty
+httpListenAddress: 0.0.0.0
+httpListenPort: 8066
+httpServerWorkerName: 
+
+# for mysql db
+jdbc_url: jdbc:mysql://localhost:3306/profile?useUnicode=true&characterEncoding=utf-8
+jdbc_user: root
+jdbc_password: heqiming
+
+# data folder
+data_dir: "/data/apps/duopai/data"
+
+#photo down load folder
+photo_dir: "/Users/zhangli/log/apps/projectxx/myPhoto/"

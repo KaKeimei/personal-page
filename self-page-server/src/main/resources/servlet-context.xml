@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd" >
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<!-- replace <mvc:annotation-driven /> start -->
+	<mvc:annotation-driven conversion-service="conversion-service">
+		<mvc:message-converters>
+			<beans:bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+			<beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<beans:constructor-arg name="defaultCharset" value="UTF-8"/>
+				<beans:property name="writeAcceptCharset" value="false" />
+			</beans:bean>
+			<beans:bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+			<beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<beans:bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+	<!-- replace <mvc:annotation-driven /> end -->
+
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.hh.projectxx.server.web" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- Handles HTTP GET requests for static resources efficiently in the ${webappRoot}/xxx directory -->
+	<mvc:resources mapping="/css/**" location="/css/" />
+	<mvc:resources mapping="/img/**" location="/img/" />
+	<mvc:resources mapping="/js/**" location="/js/" />
+	<mvc:resources mapping="/swf/**" location="/swf/" />
+	<mvc:resources mapping="/static/**" location="/static/" />
+	<mvc:resources mapping="/do_not_delete/**" location="/do_not_delete/" />
+	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
+	<mvc:resources mapping="/crossdomain.xml" location="/crossdomain.xml" />
+	<mvc:resources mapping="/install/**" location="/install/" />
+	<mvc:resources mapping="/portal/**" location="/portal/" />
+	<mvc:resources mapping="/**" location="/" />
+			
+	<!-- View resolvers can also be configured with ResourceBundles or XML files. If you need different view resolving based
+		on Locale, you have to use the resource bundle resolver. -->
+	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<beans:property name="contentType" value="text/html;charset=utf-8" />
+		<beans:property name="cache" value="true" />
+		<beans:property name="prefix" value="" />
+		<beans:property name="suffix" value=".ftl" />
+		<beans:property name="exposeRequestAttributes" value="true" />
+		<beans:property name="exposeSessionAttributes" value="true" />
+		<beans:property name="requestContextAttribute" value="request" />
+	</beans:bean>
+
+	<!-- 配置异常刨除页面 -->
+	<beans:bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<beans:property name="exceptionMappings">
+			<beans:props>
+				<beans:prop key="java.lang.Exception">error</beans:prop>
+			</beans:props>
+		</beans:property>
+		<beans:property name="warnLogCategory" value="errorpage"></beans:property>
+	</beans:bean>
+
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- the maximum file size in bytes : 10M -->
+		<beans:property name="maxUploadSize" value="10485760" />
+		<!-- the maximum in memory size allowed in bytes : 10M -->
+		<beans:property name="maxInMemorySize" value="10485760" />
+		<beans:property name="defaultEncoding" value="UTF-8" />
+	</beans:bean>
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/web/**" />
+			<beans:bean class="com.hh.projectxx.server.web.interceptor.LoginInterceptor" />
+		</mvc:interceptor>
+
+
+	</mvc:interceptors>
+	
+	
+	
+</beans:beans>

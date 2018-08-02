@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hh.projectxx.base.db.mapper.EvilGifMapper" >
+  <resultMap id="BaseResultMap" type="com.hh.projectxx.base.db.entity.EvilGif" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="website" property="website" jdbcType="VARCHAR" />
+    <result column="identify_id" property="identifyId" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="series_id" property="seriesId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, source, website, identify_id, description, create_time, series_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from evil_gif
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectGifByRange" resultMap="BaseResultMap">
+  	select * from evil_gif where 1=1 
+  	<if test="startId != null">
+  		and id &gt;= #{startId}
+  	</if>
+  	<if test="endId != null">
+  		and id &lt;= #{endId}
+  	</if>
+  	limit 0,1000
+  </select>
+  
+  <select id="selectBySeriesId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from evil_gif
+    where series_id = #{seriesId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="select20NewRecords" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from evil_gif
+    where status = 0 and series_id is null limit 20
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from evil_gif
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hh.projectxx.base.db.entity.EvilGif" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into evil_gif (source, website, identify_id, description,
+      create_time, series_id)
+    values (#{source}, #{website}, #{identifyId}, #{description},
+      #{createTime,jdbcType=TIMESTAMP}, #{seriesId})
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.hh.projectxx.base.db.entity.EvilGif" >
+    update evil_gif
+    <set >
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null" >
+        website = #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="identifyId != null" >
+        identify_id = #{identifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="seriesId != null" >
+        series_id = #{seriesId,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateSeries" parameterType="com.hh.projectxx.base.db.entity.EvilGif" >
+    update evil_gif
+    <set >
+      
+      <if test="seriesId != null" >
+        series_id = #{seriesId,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id &gt;= #{id,jdbcType=INTEGER} and id &lt; #{id,jdbcType=INTEGER} + 10
+  </update>
+  
+</mapper>

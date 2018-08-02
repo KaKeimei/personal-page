@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hh.projectxx.base.db.mapper.EvilGifSeriesMapper" >
+  <resultMap id="BaseResultMap" type="com.hh.projectxx.base.db.entity.EvilGifSeries" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, description, create_time, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from evil_gif_series
+    where id = #{id,jdbcType=INTEGER}
+    
+  </select>
+  <select id="selectByRowbouds" resultMap="BaseResultMap">
+  	select * from evil_gif_series 
+  	order by id desc
+  </select>
+  
+  <select id="countAll" resultType="java.lang.Integer">
+  	select count(*) from evil_gif_series 
+  </select>
+  
+  <select id="selectMaxId" resultType="java.lang.Integer">
+  	select max(id) from evil_gif_series 
+  </select>
+  
+  <select id="selectByMaxId" resultMap="BaseResultMap">
+  	select * from evil_gif_series order by id desc limit 1
+  </select>
+  
+  <insert id="insert" parameterType="com.hh.projectxx.base.db.entity.EvilGifSeries" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into evil_gif_series (description,
+      create_time, modify_time)
+    values (#{description},
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime})
+  </insert>
+ 
+  
+  
+</mapper>
